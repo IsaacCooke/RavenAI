@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen>{
                   onPressed: () {
                     print(nameController.text); //* DEBUG LINE
                     print(passwordController.text); //* DEBUG LINE
-                    validateForm(nameController.text, passwordController.text);
+                    // validateForm(nameController.text, passwordController.text); //! Need to add validation here.
                   },
                 )
             ),
@@ -98,6 +98,31 @@ class _LoginScreenState extends State<LoginScreen>{
   }
 }
 
-void validateForm(String email, String password){
+abstract class Validator extends State{
   late Future<User> futureUser;
+
+  void initState(){
+    super.initState();
+    futureUser = fetchUser();
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return(
+      FutureBuilder<User>(
+        future: futureUser,
+        builder: (context, snapshot){
+          if(snapshot.hasData){
+            return const Text('Did some stuff'); //! Need to put something on this line for the validation
+          } else if(snapshot.hasError){
+            return Text('${snapshot.error}'); //! Need to finish this line as well- notice that credentials are wrong?
+          }
+
+          return const CircularProgressIndicator(); // To the hatred of millions...
+        },
+      )
+    );
+  }
 }
+
+/// I listened to the live version of 'Bigger than Us' by White Lies while writing this file.
