@@ -14,6 +14,4 @@ Future<User> fetchUser() async {
   } else {
     throw Exception('Failed to load user data');
   }
-
-  // TODO: Add origin point to CorsPolicy in Program.cs
 }

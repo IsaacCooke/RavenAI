@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:ravenfront/api/user_api.dart';
+import 'package:ravenfront/models/user.dart';
+
 class LoginScreen extends StatefulWidget{
   const LoginScreen({Key? key}): super(key: key);
 
@@ -42,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen>{
                 controller: nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
-                  labelText: 'User Name',
+                  labelText: 'Email',
                 ),
               ),
             ),
@@ -69,12 +72,14 @@ class _LoginScreenState extends State<LoginScreen>{
                 child: ElevatedButton(
                   child: const Text('Login'),
                   onPressed: () {
-                    print(nameController.text);
-                    print(passwordController.text);
+                    print(nameController.text); //* DEBUG LINE
+                    print(passwordController.text); //* DEBUG LINE
+                    validateForm(nameController.text, passwordController.text);
                   },
                 )
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Text('Does not have account?'),
                 TextButton(
@@ -87,9 +92,12 @@ class _LoginScreenState extends State<LoginScreen>{
                   },
                 )
               ],
-              mainAxisAlignment: MainAxisAlignment.center,
             ),
           ],
         ));
   }
+}
+
+void validateForm(String email, String password){
+  late Future<User> futureUser;
 }
