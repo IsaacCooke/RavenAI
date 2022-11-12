@@ -1,7 +1,7 @@
 const baseUserUri = 'https://localhost:7096/api/user';
 
 class User {  
-  final int userId;
+  final String userId;
   final String firstName;
   final String lastName;
   final String email;

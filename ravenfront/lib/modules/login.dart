@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:ravenfront/api/user_api.dart';
 import 'package:ravenfront/models/user.dart';
@@ -11,8 +12,38 @@ class LoginScreen extends StatefulWidget{
 }
 
 class _LoginScreenState extends State<LoginScreen>{
-  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController idController = TextEditingController();
+  late Future<User> futureUser;
+
+  void initState(){
+    super.initState();
+    futureUser = fetchUser();
+  }
+
+  bool validateForm(String email, String password, String id){
+    bool succeeded = false;
+    FutureBuilder<User>(
+      future: futureUser,
+      builder: (context, snapshot) {
+        if(snapshot.hasData){
+          print("There is data");
+          if(snapshot.data!.password == password){
+            print("the password is correct");
+            if(snapshot.data!.email == email){
+              succeeded = true;
+              return const Text("Worked");
+            }
+          }
+        }
+        print("No data found");
+        succeeded = false;
+        return const Text("Failed");
+      }
+    );
+    return succeeded;
+  }
 
   @override
   Widget build(BuildContext context){
@@ -42,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen>{
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
-                controller: nameController,
+                controller: emailController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Email',
@@ -60,6 +91,17 @@ class _LoginScreenState extends State<LoginScreen>{
                 ),
               ),
             ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: TextField(
+                obscureText: false,
+                controller: idController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'id',
+                ),
+              ),
+            ),
             TextButton(
               onPressed: () {
                 //forgot password screen
@@ -72,23 +114,23 @@ class _LoginScreenState extends State<LoginScreen>{
                 child: ElevatedButton(
                   child: const Text('Login'),
                   onPressed: () {
-                    print(nameController.text); //* DEBUG LINE
+                    print(emailController.text); //* DEBUG LINE
                     print(passwordController.text); //* DEBUG LINE
-                    // validateForm(nameController.text, passwordController.text); //! Need to add validation here.
-                  },
-                )
+                    print(validateForm(emailController.text, passwordController.text, idController.text));
+                  }
+                ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Text('Does not have account?'),
+                const Text('Don\'t have account?'),
                 TextButton(
                   child: const Text(
-                    'Sign in',
+                    'Sign up',
                     style: TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
-                    //signup screen
+                    //sign-up screen
                   },
                 )
               ],
@@ -98,31 +140,5 @@ class _LoginScreenState extends State<LoginScreen>{
   }
 }
 
-abstract class Validator extends State{
-  late Future<User> futureUser;
-
-  void initState(){
-    super.initState();
-    futureUser = fetchUser();
-  }
-
-  @override
-  Widget build(BuildContext context){
-    return(
-      FutureBuilder<User>(
-        future: futureUser,
-        builder: (context, snapshot){
-          if(snapshot.hasData){
-            return const Text('Did some stuff'); //! Need to put something on this line for the validation
-          } else if(snapshot.hasError){
-            return Text('${snapshot.error}'); //! Need to finish this line as well- notice that credentials are wrong?
-          }
-
-          return const CircularProgressIndicator(); // To the hatred of millions...
-        },
-      )
-    );
-  }
-}
 
 /// I listened to the live version of 'Bigger than Us' by White Lies while writing this file.
