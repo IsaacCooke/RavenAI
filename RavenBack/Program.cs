@@ -1,13 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using RavenBack.Data;
+using RavenBack.Models;
 
 var CorsPolicy = "_corsPolicy";
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<Context>(options => 
-    options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
+builder.Services.Configure<RavenDatabaseSettings>(
+    builder.Configuration.GetSection("MongoDB")
+);
 
 builder.Services.AddCors(options =>
     {

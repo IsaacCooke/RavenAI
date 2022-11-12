@@ -1,11 +1,16 @@
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace RavenBack.Models
 {
     public class User
     {
-        public int UserId { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
         [StringLength(maximumLength: 24, MinimumLength = 1)]
+        [BsonElement("Name")]
         public string? FirstName { get; set; }
         [StringLength(maximumLength: 24, MinimumLength = 1)]
         public string? LastName { get; set; }
