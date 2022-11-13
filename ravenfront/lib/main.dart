@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ravenfront/modules/login.dart';
+import 'package:ravenfront/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,15 +11,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Login',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
-        appBar: AppBar(title: const Text("Login")),
-        body: const LoginScreen(),
-      ),
+      home: Home(),
     );
   }
 }

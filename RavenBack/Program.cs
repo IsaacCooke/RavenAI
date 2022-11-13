@@ -15,7 +15,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: CorsPolicy,
     policy =>
     {
-        policy.WithOrigins("http://localhost:57750");
+        policy.WithOrigins(
+            "http://localhost:57750",
+            "http://localhost:19006",
+            "http://localhost:49416/",
+            "http://localhost:49535"
+            );
     });
 });
 
@@ -33,7 +38,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(CorsPolicy);
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials());
 
 app.UseHttpsRedirection();
 
