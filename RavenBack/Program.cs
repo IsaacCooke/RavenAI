@@ -15,12 +15,14 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: CorsPolicy,
     policy =>
     {
-        policy.WithOrigins(
-            "http://localhost:57750",
+        policy.WithOrigins
+        (
+            "exp://192.168.0.41:19000",
             "http://localhost:19006",
-            "http://localhost:49416/",
-            "http://localhost:49535"
-            );
+            "http://localhost:19000"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
@@ -38,11 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(x => x
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true)
-    .AllowCredentials());
+app.UseCors(CorsPolicy);
 
 app.UseHttpsRedirection();
 
