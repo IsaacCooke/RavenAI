@@ -16,44 +16,91 @@ class Home extends StatefulWidget{
 
 class HomeState extends State<Home>{
   late Future<User> futureUser;
+  Future<User>? _newFutureUser;
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState(){
     super.initState();
-    futureUser = fetchUser();
+    UserService userService = new UserService();
+    futureUser = userService.fetchUser();
   }
 
   Widget build(BuildContext context){
     return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: FutureBuilder<User>(
-            future: futureUser,
-            builder: ((context, snapshot) {
-            if(snapshot.hasData){
-              return Text(snapshot.data!.id);
-            } else if(snapshot.hasError){
-              return Text('${snapshot.error}');
-            }
-            return const CircularProgressIndicator();
-          }),
-          ),
+        body: Column(
+          children: <Widget>[
+              FutureBuilder<User>(
+              future: futureUser,
+              builder: ((context, snapshot) {
+              if(snapshot.hasData){
+                return Text(snapshot.data!.id);
+              } else if(snapshot.hasError){
+                return Text('${snapshot.error}');
+              }
+              return const CircularProgressIndicator();
+              }),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextFormField(
+                  controller: _firstNameController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.airline_seat_recline_normal_sharp),
+                    hintText: "Enter your first name",
+                    labelText: "First Name",
+                  ),
+                ),
+                TextFormField(
+                  controller: _lastNameController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.account_circle),
+                    hintText: "Enter your last name",
+                    labelText: "Last Name",
+                  ),
+                ),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.email),
+                    hintText: "Enter your email address",
+                    labelText: "Email Address",
+                  ),
+                ),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.password),
+                    hintText: "Enter your password",
+                    labelText: "Password",
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: (){
+                    setState(() {
+                      UserService userService = new UserService();
+                      _newFutureUser = userService.createUser(User(
+                        id: '',
+                        firstName: _firstNameController.text,
+                        lastName: _lastNameController.text,
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                      ));
+                    });
+                  },
+                  child: const Text("Submit"),
+                )
+              ],
+            ),
+          ]
         ),
-      )
+      ),
     );
   }
 }
-
-Future<User> fetchUser() async {
-    final response = await http
-      .get(Uri.parse(ApiConstants.baseUrl + ApiConstants.usersEndpoint));
-    print(response);
-    print(response.body);
-    print(User.fromJson(jsonDecode(response.body)));
-    if(response.statusCode == 200){
-      print(response);
-      return User.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception("Failed to load user");
-    }
-  }
