@@ -1,39 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, setState } from 'react';
 import axios from 'axios';
 import { View, Text } from 'react-native';
 
-const baseUrl = 'https://localhost:5001/api/users';
+const baseUrl = 'https://50fa-80-195-185-6.eu.ngrok.io/api/users/636f8e2b22155b5827204688';
 const headers = {
     "Content-Type": "application/json",
 }
 
 function UserService(){
     const [user, setUser] = useState(null);
+
     useEffect(() => {
-        axios.get(baseUrl, {headers}).then((response) => {
+        axios.get(baseUrl).then((response) => {
             setUser(response.data);
-            console.log(response.data);
-        }).catch(function(error){
-            console.log(error);
-            console.log(error.response.data);
         });
     }, []);
 
-    if(!user) return(
-        <Text>There are no users</Text>
-    );
-
-    function UserList(user){
-        for(var i in user){
-            return(
-                <Text>{user.id}</Text>
-            )
-        }
-    }
+    if(!user) return <Text>No users</Text>
 
     return(
         <View>
-            <Text>{UserList(user)}</Text>
+            <Text>{user.id}</Text>
         </View>
     )
 }

@@ -1,66 +1,59 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:ravenfront/models/user.dart';
 import 'package:ravenfront/api/user_service.dart';
+import 'package:ravenfront/api/constants.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
 
+class Home extends StatefulWidget{
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
-  late List<User>? _userModel = [];
+class HomeState extends State<Home>{
+  late Future<User> futureUser;
+
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    _getData();
+    futureUser = fetchUser();
   }
 
-  void _getData() async {
-    print("Called _getData()");
-    _userModel = (await UserService().getUsers());
-    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('REST API Example'),
-      ),
-      body: _userModel == null || _userModel!.isEmpty
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: _userModel!.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(_userModel![index].id.toString()),
-                          Text(_userModel![index].firstName),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(_userModel![index].email),
-                          Text(_userModel![index].lastName),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+  Widget build(BuildContext context){
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: FutureBuilder<User>(
+            future: futureUser,
+            builder: ((context, snapshot) {
+            if(snapshot.hasData){
+              return Text(snapshot.data!.id);
+            } else if(snapshot.hasError){
+              return Text('${snapshot.error}');
+            }
+            return const CircularProgressIndicator();
+          }),
+          ),
+        ),
+      )
     );
   }
 }
+
+Future<User> fetchUser() async {
+    final response = await http
+      .get(Uri.parse(ApiConstants.baseUrl + ApiConstants.usersEndpoint));
+    print(response);
+    print(response.body);
+    print(User.fromJson(jsonDecode(response.body)));
+    if(response.statusCode == 200){
+      print(response);
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Failed to load user");
+    }
+  }
