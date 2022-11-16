@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ravenfront/home.dart';
+import 'package:ravenfront/other_home.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Login',
-      home: Home(),
+      home: const Home(),
     );
   }
 }

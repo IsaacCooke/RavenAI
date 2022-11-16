@@ -15,6 +15,8 @@ class Home extends StatefulWidget{
 }
 
 class HomeState extends State<Home>{
+  UserService userService = new UserService();
+  late List<User>? _user = [];
   late Future<User> futureUser;
   Future<User>? _newFutureUser;
 
@@ -26,8 +28,12 @@ class HomeState extends State<Home>{
   @override
   void initState(){
     super.initState();
-    UserService userService = new UserService();
     futureUser = userService.fetchUser();
+  }
+
+  void _getData() async {
+    _user = (await userService.getUsers())!;
+    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
   }
 
   Widget build(BuildContext context){
@@ -84,7 +90,6 @@ class HomeState extends State<Home>{
                 ElevatedButton(
                   onPressed: (){
                     setState(() {
-                      UserService userService = new UserService();
                       _newFutureUser = userService.createUser(User(
                         id: '',
                         firstName: _firstNameController.text,
@@ -98,9 +103,45 @@ class HomeState extends State<Home>{
                 )
               ],
             ),
-          ]
+            Expanded(
+            child: ListView.builder(
+              itemCount: _user!.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(_user![index].id),
+                              Text(_user![index].firstName),
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+            )
+          ],
         ),
       ),
     );
   }
 }
+
+
+/*
+FutureBuilder<User>(
+              future: futureUser,
+              builder: ((context, snapshot) {
+              if(snapshot.hasData){
+                return Text(snapshot.data!.id);
+              } else if(snapshot.hasError){
+                return Text('${snapshot.error}');
+              }
+              return const CircularProgressIndicator();
+              }),
+
+
+*/
