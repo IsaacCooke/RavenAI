@@ -18,5 +18,6 @@ namespace RavenBack.Models
         public string? Email { get; set; }
         [StringLength(maximumLength: 30, MinimumLength = 8)]
         public string? Password { get; set; }
+        public Address Address { get; set; } = null!;
     }
 }

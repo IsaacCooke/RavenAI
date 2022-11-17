@@ -1,14 +1,19 @@
-using System.Collections.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-public class Address{
+namespace RavenBack.Models
+{
+    public class Address
+    {
+        [StringLength(maximumLength: 511, MinimumLength = 1)]
+        public string? Street { get; set; }
+        [StringLength(maximumLength: 511, MinimumLength = 1)]
+        public string? Town { get; set; }
+        public string? Country { get; set; }
+        public int HouseNumber { get; set; }
+        public string? HouseName { get; set; }
+        public string? PostCode { get; set; }
+    }
 
-    [BsonId(ObjectId)]
-    public string id { get; set; }
-    
-    public string? Street { get; set; }
-    
-    public int HouseNumber { get; set; } = null!;
-    
-    public string? HouseName { get; set; }
 }
