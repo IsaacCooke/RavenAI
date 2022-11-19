@@ -9,12 +9,12 @@ import 'package:ravenfront/api/user_service.dart';
 import 'package:ravenfront/api/constants.dart';
 
 
-class Home extends StatefulWidget{
+class ApiDemo extends StatefulWidget{
   @override
-  State<Home> createState() => HomeState();
+  State<ApiDemo> createState() => _APIDemoState();
 }
 
-class HomeState extends State<Home>{
+class _APIDemoState extends State<ApiDemo>{
   UserService userService = new UserService();
   late List<User>? _user = [];
   late Future<User> futureUser;
@@ -96,6 +96,14 @@ class HomeState extends State<Home>{
                         lastName: _lastNameController.text,
                         email: _emailController.text,
                         password: _passwordController.text,
+                        address: const Address(
+                          street: 'Nowhere',
+                          town: 'Nowhere',
+                          country: 'Nowhere',
+                          houseNumber: 0,
+                          houseName: 'Nowhere',
+                          postCode: 'Nowhere',
+                        )
                       ));
                     });
                   },

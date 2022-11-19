@@ -1,5 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ravenfront/other_home.dart';
+import 'package:ravenfront/helpers/navigation_helper.dart';
 
 
 void main() {
@@ -12,9 +13,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Login',
-      home: const Home(),
+      home: NavBar(),
     );
   }
 }
