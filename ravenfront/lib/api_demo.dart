@@ -38,6 +38,7 @@ class _APIDemoState extends State<ApiDemo>{
 
   Widget build(BuildContext context){
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Column(
           children: <Widget>[

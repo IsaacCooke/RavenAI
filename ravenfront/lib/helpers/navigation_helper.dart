@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ravenfront/other_home.dart';
+import 'package:ravenfront/pages/home_screen.dart';
 import 'package:ravenfront/api_demo.dart';
 
 class NavBar extends StatefulWidget{
@@ -12,7 +12,7 @@ class NavBar extends StatefulWidget{
 class _NavBarState extends State<NavBar>{
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
-    const Text('Index 0: Home'),
+    const Home(),
     ApiDemo(),
   ];
 
