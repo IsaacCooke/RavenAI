@@ -7,14 +7,14 @@ class Language{
   static const phrases = [greetings, openBrowser];
 
   parseInput(String input){
-    Utils utils = Utils();
-    input = input.toLowerCase();
-    Intent intent = Intent.none;
+    Utils utils = Utils(); // Creating an instance of the Utils class
+    input = input.toLowerCase(); // Sanitizing the input
+    Intent intent = Intent.none; // Initialisiing the intent enum
 
-    for(var phrase in phrases){
-      for(var word in phrase){
+    for(var phrase in phrases){ // Creating a for loop
+      for(var word in phrase){ // Another for loop
         if(input.contains(word)){
-          switch (phrase){
+          switch (phrase){ // Checking the phrase for references to one of the set phrases
             case greetings: {
               intent = Intent.greeting;
             }
